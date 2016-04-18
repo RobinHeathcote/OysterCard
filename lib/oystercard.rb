@@ -13,7 +13,11 @@ class OysterCard
   	@balance += num
   end
 
+  def deduct(fare)
+  	@balance -= fare
+  end
+
   def reach_limit?
-    balance + @num >= 90
+    balance + @num > 90
   end
 end

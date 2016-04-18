@@ -17,5 +17,11 @@ describe OysterCard do
     expect{subject.top_up(95)}.to raise_error "Cannot add more than #{OysterCard::LIMIT}"
   end
 
+  it { is_expected.to respond_to(:deduct) }
+
+  it 'deducts fare from balance' do
+  	subject.top_up(90)
+  	expect(subject.deduct(6)).to eq 84
+  end
 
 end
