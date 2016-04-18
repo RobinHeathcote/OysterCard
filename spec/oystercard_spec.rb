@@ -7,10 +7,15 @@ describe OysterCard do
   end
 
   it { is_expected.to respond_to(:top_up) }
-  
+
   it 'update balance to 80' do
   	subject.top_up(80)
   	expect(subject.balance).to eq 80
   end
+
+  it 'raise error if balance is over 90' do
+    expect{subject.top_up(95)}.to raise_error "Cannot add more than #{OysterCard::LIMIT}"
+  end
+
 
 end
