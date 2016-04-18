@@ -6,5 +6,11 @@ describe OysterCard do
       expect(subject.balance).to eq 0
   end
 
+  it { is_expected.to respond_to(:top_up) }
+  
+  it 'update balance to 80' do
+  	subject.top_up(80)
+  	expect(subject.balance).to eq 80
+  end
 
 end
