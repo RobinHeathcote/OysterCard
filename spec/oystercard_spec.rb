@@ -4,73 +4,68 @@ describe Oystercard do
 
   let(:station) {double :station}
   let(:entry_station) { double :station }
-  let(:exit_station) { double :station } 
+  let(:exit_station) { double :station }
 # let(:card_balance) {double(:card, balance: Oystercard::BALANCE_LIMIT, entry_station: station)}
   let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+  subject(:card) {described_class.new}
 
   it "can top up the balance" do
-    expect { subject.top_up 1 }.to change{ subject.balance }.by 1
+      expect {card.top_up 1 }.to change{ card.balance }.by 1
   end
 
   it 'raises an error if top up amount exceeds 90' do
-    maximum_balance = Oystercard::BALANCE_LIMIT
-    subject.top_up(maximum_balance)
-    expect { subject.top_up 1 }.to raise_error "balance should not exceed £#{maximum_balance}"
+      maximum_balance = Oystercard::BALANCE_LIMIT
+      card.top_up(maximum_balance)
+      expect { card.top_up 1 }.to raise_error "balance should not exceed £#{maximum_balance}"
   end
 
   it {is_expected.to respond_to(:in_journey?)}
 
-  it "in journey returns false" do
-    expect(subject).not_to be_in_journey
+  it "For a new card, in journey returns false" do
+      expect(card).not_to be_in_journey
   end
 
   it{is_expected.to respond_to(:touch_in).with(1).argument}
 
-  it "journey starts with touch in" do
-    subject.top_up 12
-    subject.touch_in(station)
-    expect(subject).to be_in_journey
+  it "starts journey with touch in" do
+      card.top_up(12)
+      card.touch_in(station)
+      expect(card).to be_in_journey
   end
 
   it{is_expected.to respond_to(:touch_out).with(1).argument}
 
-  it "journey ends with touch out" do
-    subject.top_up 30
-    subject.touch_in(station)
-    subject.touch_out(station)
-    expect(subject).not_to be_in_journey
+  it "ends journey with touch out" do
+      card.top_up(30)
+      card.touch_in(station)
+      card.touch_out(station)
+      expect(card).not_to be_in_journey
   end
 
   it "raises an error when balance is less than 1" do
-    expect {subject.touch_in(station) }.to raise_error "insufficient balance"
+      expect {card.touch_in(station) }.to raise_error "insufficient balance"
   end
 
-  it 'should deduct minimum fare on touch out' do
-    subject.top_up(Oystercard::BALANCE_LIMIT)
-    expect {subject.touch_out station}.to change {subject.balance}.by -Oystercard::MINIMUM_FARE
+  it 'deducts minimum fare on touch out' do
+      card.top_up(Oystercard::BALANCE_LIMIT)
+      expect {card.touch_out station}.to change {card.balance}.by -Oystercard::MINIMUM_FARE
   end
 
   it 'stores the entry station' do
-    subject.top_up(80)
-    subject.touch_in(station)
-    expect(subject.entry_station).to eq station
+      card.top_up(80)
+      card.touch_in(station)
+      expect(card.entry_station).to eq station
   end
 
-  it "card has no journey" do
-    expect(subject.journeys).to be_empty
+  it "new cards have no journeys stored" do
+     expect(card.journeys).to be_empty
   end
 
-  it "stores journey" do
-    subject.top_up 30
-    subject.touch_in(entry_station)
-    subject.touch_out(exit_station)
-    expect(subject.journeys).to include journey
+  it "stores a journey" do
+      card.top_up(30)
+      card.touch_in(entry_station)
+      card.touch_out(exit_station)
+      expect(card.journeys).to include journey
 
-
-#    subject.top_up 30
-#    subject.touch_in(:station1)
-#    subject.touch_out(:station2)
-#    expect(subject.journey.length).to eq 2
-    #expect(subject.journey).to include("begin_journey"=>:station1,"end_journey"=>:station2)
   end
 end
