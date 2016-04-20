@@ -18,12 +18,16 @@ class Oystercard
   end
 
   def touch_in(journey = Journey.new(station))
+    touch_out(nil) if !journeys.last.complete?
     fail "insufficient balance" if @balance < MINIMUM_BALANCE
     @journeys << journey
   end
 
   def touch_out(station)
-    deduct(MINIMUM_FARE)
+    if journeys.last.complete?
+      touch_in(journey = Journey.new)
+    end
+    deduct(journeys.last.end_journey(station).fare)
   end
 
   private
