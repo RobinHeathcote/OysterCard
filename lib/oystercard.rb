@@ -6,7 +6,6 @@ class Oystercard
 
   attr_reader :balance, :journeys
 
-
   def initialize
     @balance = 0
     @journeys = []
@@ -18,7 +17,7 @@ class Oystercard
   end
 
   def touch_in(journey = Journey.new(station))
-    touch_out(nil) if !journeys.last.complete?
+    touch_out(nil) unless (new_card? || journeys.last.complete?)
     fail "insufficient balance" if @balance < MINIMUM_BALANCE
     @journeys << journey
   end
@@ -38,6 +37,10 @@ class Oystercard
 
   def reach_limit?(amount)
     @balance + amount > BALANCE_LIMIT
+  end
+
+  def new_card?
+    journeys.empty?
   end
 
 end

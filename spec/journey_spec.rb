@@ -23,6 +23,7 @@ describe Journey do
   end
 
   describe '#fare' do
+
     it 'deducts penalty fare if no start station' do
       expect(journey_no_start.fare).to eq Journey::PENALTY_FARE
     end
@@ -30,9 +31,6 @@ describe Journey do
     it 'deducts penalty fare if no exit_station station' do
       expect(journey.fare).to eq Journey::PENALTY_FARE
     end
-
-
-
 
   end
 end

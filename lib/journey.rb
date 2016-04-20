@@ -16,15 +16,16 @@ class Journey
   end
 
   def complete?
-    !!exit_station
-  end
-
-  def started?
-    !!starting_station
+    !!starting_station && !!exit_station
   end
 
   def fare
-    return PENALTY_FARE if (!started? || !complete?)
-    MINIMUM_FARE
+    return MINIMUM_FARE if complete?
+    PENALTY_FARE
   end
+
+  private
+
+
+
 end
