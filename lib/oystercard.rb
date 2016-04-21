@@ -1,8 +1,6 @@
 require_relative 'journey'
 class Oystercard
 
-# test push
-
   BALANCE_LIMIT = 90
   MINIMUM_FARE = 1
   attr_reader :balance, :journey
@@ -25,10 +23,6 @@ class Oystercard
 
   def touch_out(exit_station)
     deduct(journey.finish(exit_station))
-  end
-
-  def in_journey?
-    journey.in_journey?
   end
 
   private

@@ -33,7 +33,7 @@ describe Journey do
 
       it "charge minimum fare if complete journey" do
         journey.start(station)
-        expect(journey.finish(station)).to eq 1
+        expect(journey.finish(station)).to eq Oystercard::MINIMUM_FARE
       end
 
       it "returns journey not complete" do
