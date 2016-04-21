@@ -6,7 +6,7 @@ class Oystercard
   MINIMUM_FARE = 1
   attr_reader :balance, :journey
 
-	def initialize(journey = Journey.new)
+	def initialize(journey_log = JourneyLog.new)
 		@balance = 0
     @journey = journey
 	end
