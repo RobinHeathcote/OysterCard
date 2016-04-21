@@ -1,3 +1,5 @@
+require_relative 'journey'
+
 class Oystercard
 
   BALANCE_LIMIT = 90
@@ -17,22 +19,22 @@ class Oystercard
   end
 
   def touch_in(journey = Journey.new(station))
-    touch_out(nil) unless (new_card? || journeys.last.complete?)
+    touch_out(nil) unless (new_card? || journeys.last.complete)
     fail "insufficient balance" if @balance < MINIMUM_BALANCE
-    @journeys << journey
+    journeys << journey
   end
 
-  def touch_out(station)
-    if journeys.last.complete?
-      touch_in(journey = Journey.new)
-    end
-    deduct(journeys.last.end_journey(station).fare)
+  def touch_out(station, journey = Journey.new(nil) )
+      touch_in(journey) if (new_card? || journeys.last.complete)
+      journeys.last.finish(station)
+      deduct(journeys.last.fare)
+
   end
 
   private
 
-  def deduct(amount)
-   @balance -= amount
+  def deduct(fare)
+   @balance -= fare
   end
 
   def reach_limit?(amount)

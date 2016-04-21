@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
 
-  let(:station) {double :station}
+  let(:station) {double :station, complete: true}
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
   let(:journey){ double :journey}
@@ -36,9 +36,10 @@ describe Oystercard do
     expect {card.touch_in(station) }.to raise_error "insufficient balance"
   end
 
-  xit 'deducts minimum fare on touch out' do
+  it 'deducts minimum fare on touch out' do
       card.top_up(Oystercard::BALANCE_LIMIT)
-      expect {card.touch_out station}.to change {card.balance}.by -Oystercard::MINIMUM_FARE
+      card.touch_in(station)
+      expect {card.touch_out(station)}.to change {card.balance}.by -Oystercard::MINIMUM_FARE
   end
 
 
