@@ -3,7 +3,11 @@ load "oystercard.rb"
 describe Oystercard do
 
   subject(:oyster) { described_class.new(journey) }
+<<<<<<< HEAD
   let(:journey) { double(:journey, start: station, finish: 20) }
+=======
+  let(:journey) { double(:journey, start: station, finish: 20, in_journey?: true) }
+>>>>>>> d95dac09adce8735f711d7fb499497a24f76ff80
   let(:station) { double :station }
 
   let(:oystercard_topped) do
