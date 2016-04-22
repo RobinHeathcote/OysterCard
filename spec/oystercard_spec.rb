@@ -2,25 +2,21 @@ load "oystercard.rb"
 
 describe Oystercard do
 
-  subject(:oyster) { described_class.new(journey) }
+  subject(:oyster) { described_class.new }
 
   let(:journey) { double(:journey, start: station, finish: 20) }
   let(:station) { double :station }
 
-  let(:oystercard_topped) do
+  # it 'instruct journey to end on touch out' do
+  #     oyster.top_up(Oystercard::MINIMUM_FARE)
+  #     oyster.touch_out(station)
+  #     expect(journey_log.journeys).to include station
+
+  # end
+  it 'touches in' do
     oyster.top_up(Oystercard::MINIMUM_FARE)
     oyster.touch_in(station)
-    oyster
-  end
-
-  it 'instruct journey to ending' do
-      expect(journey).to receive(:finish)
-      oystercard_topped.touch_out(station)
-  end
-
-  it 'instruct journey to start' do
-      expect(journey).to receive(:start)
-      oystercard_topped
+    expect(oyster.journey_log.journeys.last.entry_station).to eq station
   end
 
 

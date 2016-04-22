@@ -4,19 +4,36 @@ require_relative 'station'
 
 class JourneyLog
 
-  attr_reader :journey_class, :journey, :station
+  attr_reader :station, :journeys, :journey
 
-  def initialize(journey_class: journey = Journey.new)
-    @journey_class = journey_class
+  def initialize(journey_class = Journey.new)
     @journeys = []
-    @journey = journey
+    @journey = journey_class
 
   end
 
   def start(station)
-    @entry_station = station
+
+    journey.start(station)
+    add_journey
   end
 
+  def finish(station)
+    journey.finish(station)
+    add_journey
+  end
+
+  private
+
+  def current_journey
+    return journey if !journey.complete?
+    @journey = Journey.new
+  end
+
+  def add_journey
+   return @journeys << current_journey if !journey.complete?
+    @journeys
+  end
 
 end
 
