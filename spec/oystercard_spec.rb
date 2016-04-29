@@ -1,27 +1,45 @@
-require 'oystercard'
 
-describe OysterCard do
+load "oystercard.rb"
 
-  it 'has a balance of 0 when initialized' do
-      expect(subject.balance).to eq 0
+describe Oystercard do
+
+  subject(:oyster) { described_class.new }
+
+  let(:journey) { double(:journey, start: station, finish: 20) }
+  let(:station) { double :station }
+
+  it 'instruct journey to end on touch out' do
+      oyster.top_up(Oystercard::MINIMUM_FARE)
+      oyster.touch_out(station)
+      expect(oyster.journey_log.journeys.last.exit_station).to eq station
+
+  end
+  it 'touches in' do
+    oyster.top_up(Oystercard::MINIMUM_FARE)
+    oyster.touch_in(station)
+    expect(oyster.journey_log.journeys.last.entry_station).to eq station
   end
 
-  it { is_expected.to respond_to(:top_up) }
 
-  it 'update balance to 80' do
-  	subject.top_up(80)
-  	expect(subject.balance).to eq 80
+  context "balance" do
+
+		it "shows the balance as zero with initialized" do
+	   expect(subject.balance).to eq 0
+		end
+
+	  it 'cannot top up above the balance limit' do
+	    subject.top_up(Oystercard::BALANCE_LIMIT)
+	    expect { subject.top_up 1}.to raise_error "Your balance cannot exceed £#{Oystercard::BALANCE_LIMIT}"
+	  end
   end
 
-  it 'raise error if balance is over 90' do
-    expect{subject.top_up(95)}.to raise_error "Cannot add more than #{OysterCard::LIMIT}"
+
+  describe "Touching in and out" do
+
+    context "No money on the card" do
+      it "Does not allow travel below minimum balance" do
+        expect {subject.touch_in(station)}.to raise_error "You do not have the minimum balance for travel"
+      end
+	 end
   end
-
-  it { is_expected.to respond_to(:deduct) }
-
-  it 'deducts fare from balance' do
-  	subject.top_up(90)
-  	expect(subject.deduct(6)).to eq 84
-  end
-
 end
