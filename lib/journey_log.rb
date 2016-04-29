@@ -13,26 +13,29 @@ class JourneyLog
   end
 
   def start(station)
-
     journey.start(station)
-    add_journey
+    close_journey
   end
 
   def finish(station)
     journey.finish(station)
-    add_journey
+    close_journey
   end
 
   private
 
   def current_journey
-    return journey if !journey.complete?
-    @journey = Journey.new
+    return @journey if !journey.complete?
+
   end
 
-  def add_journey
-   return @journeys << current_journey if !journey.complete?
-    @journeys
+  def close_journey
+    if journey.complete?
+      @journeys << journey
+      @journey = Journey.new
+    else
+      @journey = Journey.new(station)
+    end
   end
 
 end

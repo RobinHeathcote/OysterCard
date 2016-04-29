@@ -22,10 +22,10 @@ class Oystercard
     journey_log.start(entry_station)
   end
 
-  # def touch_out(exit_station)
-  #   journey_log.finish(exit_station)
-  #   deduct journey.fare
-  # end
+  def touch_out(exit_station)
+    journey_log.finish(exit_station)
+    deduct(journey_log.journeys.last.fare)
+  end
 
   private
 

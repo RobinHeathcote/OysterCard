@@ -20,7 +20,6 @@ let(:journey_log) {described_class.new}
     it 'finishes a journey' do
       journey_log.start(station)
       journey_log.finish(station)
-      p journey_log.journeys
       expect(journey_log.journeys.last.exit_station).not_to eq nil
     end
   end

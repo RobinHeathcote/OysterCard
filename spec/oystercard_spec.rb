@@ -7,12 +7,12 @@ describe Oystercard do
   let(:journey) { double(:journey, start: station, finish: 20) }
   let(:station) { double :station }
 
-  # it 'instruct journey to end on touch out' do
-  #     oyster.top_up(Oystercard::MINIMUM_FARE)
-  #     oyster.touch_out(station)
-  #     expect(journey_log.journeys).to include station
+  it 'instruct journey to end on touch out' do
+      oyster.top_up(Oystercard::MINIMUM_FARE)
+      oyster.touch_out(station)
+      expect(oyster.journey_log.journeys.last.exit_station).to eq station
 
-  # end
+  end
   it 'touches in' do
     oyster.top_up(Oystercard::MINIMUM_FARE)
     oyster.touch_in(station)
